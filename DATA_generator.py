@@ -36,4 +36,37 @@ def NonUniformDataGenerator(N_Samples=100, N_PeriodicGenes=20, N_NonPeriodicGene
 
     return E,phi,coeff
 
+def optimal_shift(phi, phi0, N=200 ):
+
+    mad=12 #median abs deviation, super high, its a starting value, could be +inf
+    #there are two symetries, rotational and also multiplication by -1 (other side of the circle)
+    for i in range(N):
+        
+        offset=i/N*2*np.pi #creates many offsetts around the cycle
+        theta=(phi-offset)%(2*np.pi) #creates the shifted phi vector
+        delta=np.abs(theta-phi0)%(2*np.pi) #difference between the shifted
+
+        for j in range(len(phi)):
+            delta[j]=min(delta[j], 2*np.pi-delta[j]) #this checks if we should move in clockwise or counterclockwise direction
+        
+        if(np.median(delta)<mad):
+            mad=np.median(delta)
+            bestphi=theta
+            j_temp=j
+            sdel=delta
+        #checking the same things but on the inverted situation
+        phi=-phi%(2*np.pi)
+        theta=(phi-offset)%(2*np.pi) #creates the shifted phi vector
+        delta=np.abs(theta-phi0)%(2*np.pi) #difference between the shifted
+
+        for j in range(len(phi)):
+                delta[j]=min(delta[j], 2*np.pi-delta[j]) #this checks if we should move in clockwise or counterclockwise direction
+            
+        if(np.median(delta)<mad):
+            mad=np.median(delta)
+            bestphi=theta
+            j_temp=j
+            sdel=delta
+    
+    return bestphi,mad
 
