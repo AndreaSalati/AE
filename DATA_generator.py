@@ -45,7 +45,7 @@ def optimal_shift(phi, phi0, N=200 ):
         offset=i/N*2*np.pi #creates many offsetts around the cycle
         theta=(phi-offset)%(2*np.pi) #creates the shifted phi vector
         delta=np.abs(theta-phi0)%(2*np.pi) #difference between the shifted
-        print(delta)
+
         for j in range(len(phi)):
             delta[j]=min(delta[j], 2*np.pi-delta[j]) #this checks if we should move in clockwise or counterclockwise direction
         
